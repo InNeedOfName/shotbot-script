@@ -53,7 +53,7 @@ class plot:
         '''
         Plotting the kernel density estimation of positions
         '''
-        img_rink = plt.imread("./img/rink.png")
+        img_rink = plt.imread("./data/rink.png")
         extent=[-43,43, 0, 100]
         levels=7
         thresh=0.25
@@ -221,6 +221,6 @@ class plot:
         plot.table(data,param['tablePlt'])
         title=f"{data['team_name_home']} vs {data['team_name_away']} Shot overview\n{data['date']} - {data['place']}"
         param['fig'].suptitle(title, fontsize=16)
-        plt.savefig(f'./img/{data['gameId']}.png',dpi=300)
+        plt.savefig(f'./data/{data['gameId']}.png',dpi=300)
         plt.show()
 

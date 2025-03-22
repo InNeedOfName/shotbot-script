@@ -28,7 +28,7 @@ class Bluesky:
             tag="#"+data['team_home']+"vs"+data['team_away']
             text = client_utils.TextBuilder().text(message).tag(tag,tag[1:])
             try:
-                with open(f'./img/{game_id}.png', 'rb') as f:
+                with open(f'./data/{game_id}.png', 'rb') as f:
                     img_data = f.read()
                 aspect_ratio = models.AppBskyEmbedDefs.AspectRatio(height=100, width=100)
                 client.send_image(

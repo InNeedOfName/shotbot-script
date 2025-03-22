@@ -53,7 +53,7 @@ def kde(id_home,id_away,gameId):
     data_home=pd.DataFrame({'xPos':[-x[0] for x in positions_home],'yPos':[x[1] for x in positions_home],'team': f'{id_home}'})
     data_away=pd.DataFrame({'xPos':[x[0] for x in positions_away],'yPos':[x[1] for x in positions_away],'team': f'{id_away}'})
     combined_data = pd.concat([data_home, data_away])
-    return {'data_a':data_home,'data_b':data_away,'combined_data':combined_data}
+    return {'data_home':data_home,'data_away':data_away,'combined_data':combined_data}
 
 def shooters_by_area(id_home,id_away,gameId):
     '''

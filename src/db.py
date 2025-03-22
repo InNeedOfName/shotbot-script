@@ -30,7 +30,7 @@ class table:
         eventOwnerTeamId INTEGER, shooterId INTEGER, reason TEXT,
         time FLOAT, xPos INTEGER, yPos INTEGER);'''
         ]
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         for query in tables:
             cursor.execute(query)
@@ -42,7 +42,7 @@ class table:
         '''
         Filling the tables we created with create()
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         mapping = {
         'goal': {
@@ -112,7 +112,7 @@ class query:
         Contains query for the KDE plots which calculate the density of shotpositions
         on the ice for a team.
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         c = cursor.execute('''SELECT xPos,yPos
                     FROM shot_table where eventOwnerTeamId=? 
@@ -129,7 +129,7 @@ class query:
         Contains query for the table with numbers for a team
         goals,misses,hits on the post/crossbar,shots blocked by opponent or teammate
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         c= cursor.execute('''
                 SELECT COUNT(*),'On goal' AS reason FROM shot_table WHERE eventOwnerTeamId = ? 
@@ -147,7 +147,7 @@ class query:
         Contains query for the plot of different shottypes (wristshot,slapshot,..)
         for a team
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         ''' Data for the shotTypePlot, shotsTypes per Team'''
         c = cursor.execute('''SELECT shotType,COUNT(shotType) 
@@ -164,7 +164,7 @@ class query:
         grouped by period of the game for a team.
         Only for regular gametime, no OT implemented yet.
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         c=  cursor.execute('''SELECT 
         COUNT(*),CASE 
@@ -193,7 +193,7 @@ class query:
         for each shooter of a team.
         currently limited to the top 4 shooters.
         '''
-        conn = sqlite3.connect(f'./db/{gameId}.sqlite')
+        conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
         '''getData9'''
         c = cursor.execute('''WITH reason_counts AS (
