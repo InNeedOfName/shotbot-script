@@ -28,7 +28,7 @@ def main():
             db.table.fill(gameId)
             data=prep.all(gameId)
             plot.plot.final(data)
-            bluesky.Bluesky.post_game(gameId,data,post=False)
+            bluesky.Bluesky.post_game(gameId,data,post=True)
             Util.do.clean_up(gameId,dump_img=False,dump_db=False)
             logging.info(f'Finished run for {gameId}')
             time.sleep(5)
