@@ -10,9 +10,24 @@ This is a small script, that will:
   - Query the database for different information
   - create a plot out of it and save it as img
   - post the img on bluesky
-  
+
+You can see the result of it at https://bsky.app/profile/shotbot.bsky.social
 ## How do I use it?
 
+In general, use Python3.
+The script is using systemlibraries such as cairo, thus you'd need to
+
+````
+apt update && apt install -y \
+        libcairo2-dev \
+        libjpeg-dev \
+        libgif-dev \
+        && rm -rf /var/lib/apt/lists/*
+````
+
+or use the dockerfile.
+
+## Run the main.py
 run
 
 ````=python
@@ -23,6 +38,15 @@ python3 main.py
 to install the requirements and run the script.
 
 If you want the imgs posted, observe the Bluesky part Afterwards, you can just run the main.py.
+
+## run the run.sh
+
+The run.sh file will create a venv, install the requirements, perform the actions of the code, close the venv, delete the venv
+run it with
+
+````=bash
+./run.sh
+````
 
 ## Bluesky part
 
@@ -87,4 +111,5 @@ That's not a question.
 
 I just extracted,transformed,loaded and visualised data.
 You can draw the conclusion that you want from it, it's just statistics afterall.
+You could put your own methods into the code.
 If you want a more in depth analysis of the shots, send me a message.
