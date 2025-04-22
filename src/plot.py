@@ -2,6 +2,7 @@
 import src.db as db 
 import src.Util as Util
 import src.get as Get
+import logging 
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -45,6 +46,7 @@ class plot:
                 'teammate-blocked':cmap(7%20),'miss':cmap(9%20),'metal':cmap(11%20)}
         color_shots={'snap':'tab:red','wrist':'tab:blue','slap':'tab:green','tip-in':'tab:cyan','backhand':'tab:orange','poke':'tab:purple',
               'deflected':'tab:olive','wrap-around':'tab:pink','bat':'tab:brown'}
+        logging.info(f"Created the plot param for game {data['gameId']}")
         return {'kde_home':kde_home,'kde_away':kde_away,'kde_ab':kde_ab,'targetPlot':targetPlot,'typePlot':typePlot,'tablePlt':tablePlt,'period':period,'event_colors':event_colors,'color_shots':color_shots,
                 'fig':fig,'plt':plt}
 
@@ -55,7 +57,7 @@ class plot:
         '''
         img_rink = plt.imread("./data/rink.png")
         extent=[-43,43, 0, 100]
-        levels=7
+        levels=9
         thresh=0.25
         fill=False
 
@@ -71,6 +73,7 @@ class plot:
             color='red',
             extent=extent)
         Util.do.configure_plot(kde_home, f"{data['team_home']}'s shotpositions", extent)
+        logging.info(f"Created KDE Plot for {data['team_home']}")
 
         kde_ab.imshow(img_rink, extent=extent,aspect='auto', zorder=1)
         sns.kdeplot(data=data['combined_data'],
@@ -85,6 +88,7 @@ class plot:
             extent=extent,
             warn_singular=False,
             palette={f"{data['id_home']}": 'red', f"{data['id_away']}": 'blue'})
+        logging.info(f"Created KDE Plot for both teams")
         Util.do.configure_plot(kde_ab, f"{data['team_home']} vs. {data['team_away']} shotpositions", extent)
 
         kde_away.imshow(img_rink, extent=extent,aspect='auto', zorder=1)
@@ -99,7 +103,8 @@ class plot:
             color='blue',
             extent=extent)
         Util.do.configure_plot(kde_away, f"{data['team_away']}'s shotpositions", extent)
-    
+        logging.info(f"Created KDE Plot for {data['team_away']}")
+
     def target_plot(data,targetPlot,event_colors):
         '''
         Plotting, the shot target for the top 4 shooters per team
@@ -128,6 +133,7 @@ class plot:
         targetPlot.set_xticks([0, 1, 2, 3, 4, 5, 6, 7])
         targetPlot.set_xticklabels([Get.data.player_name(x) for x in data['d_home'].keys()] + [Get.data.player_name(x) for x in data['d_away'].keys()], rotation=90)
         targetPlot.set_title("Shooters by target")
+        logging.info(f"Created target plot for {data['team_home']} vs {data['team_away']}")
 
 
     def shot_types_plot(data,typePlot,color_shots):
@@ -140,16 +146,21 @@ class plot:
         for elem in data['shot_types_home']:
             typePlot.bar(0,elem[1]/data['shot_sums_home'],bottom=bottom,color=color_shots.get(elem[0]))
             bottom+=elem[1]/data['shot_sums_home']
+        logging.info(f"Created shotTypePlot for {data['team_home']}")
         bottom=0
         for elem in data['shot_types_away']:
             typePlot.bar(1,elem[1]/data['shot_sums_away'],bottom=bottom,color=color_shots.get(elem[0]))
             bottom+=elem[1]/data['shot_sums_away']
+        logging.info(f"Created shotTypePlot for {data['team_away']}")
+
         handles, labels = [], []
         for shot_type, color in color_shots.items():
             handles.append(plt.Line2D([0], [0], color=color, lw=4, label=shot_type))
             labels.append(shot_type)
             typePlot.legend(handles, labels,loc='center left', bbox_to_anchor=(-1.25,0.5), ncols=1,fontsize='small')
         typePlot.set_title("Shots by Shottype")
+        logging.info(f"Created complete shotTypePlot for {data['team_home']} vs {data['team_away']}")
+
     def table(data,tablePlt):
 
         img_table_a=OffsetImage(Get.image.team_img(data['id_home']),zoom=0.045,resample=True)
@@ -165,6 +176,7 @@ class plot:
         tablePlt.axis('off')
         textstr="Made with SQL & Python\nThanks to the NHL API"
         tablePlt.text(1.2, -1, textstr, fontsize=10,verticalalignment='top')
+        logging.info('Created table Plot')
 
     def targetByPeriod(data,period,event_colors):
         '''
@@ -207,6 +219,7 @@ class plot:
         period.set_title("Shots by Reg. period")
         period.set_xlim(-max_total, max_total) 
         period.set_yticks([2, 1,0], labels=["1st", "2nd", "3rd"])
+        logging.info('Created ShotTarget by Period shot')
 
 
     def final(data):
@@ -221,6 +234,7 @@ class plot:
         plot.table(data,param['tablePlt'])
         title=f"{data['team_name_home']} vs {data['team_name_away']} Shot overview\n{data['date']} - {data['place']}"
         param['fig'].suptitle(title, fontsize=16)
-        plt.savefig(f'./data/{data['gameId']}.png',dpi=300)
-        plt.show()
+        logging.info(f"Created final plot for game {data['gameId']}")
+        plt.savefig(f"./data/{data['gameId']}.png",dpi=300)
+        logging.info(f"saved final plot for game {data['gameId']}")
 

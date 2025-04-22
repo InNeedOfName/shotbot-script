@@ -3,6 +3,8 @@ from typing import List, Dict,Tuple
 import requests
 from datetime import date,timedelta
 from src.basedata import BASE_URL
+import matplotlib
+import logging
 
 class calc:
     '''
@@ -30,6 +32,7 @@ class calc:
         '''
         t=str((period-1)*2 + int(time[:1]))+time[1:]
         mins,secs=t.split(":")
+        logging.info(f'Fixed time for {period},{time}')
         return int(mins)+(int(secs)/60)
         
     def position(side: str, x_pos: int, y_pos: int) -> Tuple[int, int]:
@@ -37,14 +40,16 @@ class calc:
         Change xPos,yPos so both teams get one side of the ice 
         in respect to playing direction.
         args:
-            side the homeDefendingSide
-            x_pos
-            y_pos
+            side    side of the homeDefendingSide
+            x_pos   Position of the player on the x-axis
+            y_pos   Position of the player on the y-axis
         returns
             x_pos,y_pos as transformed values
         '''
+        logging.info(f'Attempting to fix positions {x_pos},{y_pos}')
         if side=='left':
             x_pos,y_pos=-x_pos,-y_pos 
+            logging.info(f'Fixed positions {x_pos},{y_pos}')
         return x_pos,y_pos
     
 class do:
@@ -64,18 +69,20 @@ class do:
         '''
         if dump_img==True:
             try:
-                os.remove(f'./img/{gameId}.png')
+                os.remove(f'./data/{gameId}.png')
+                logging.info('Clean up of img succesful')
             except FileNotFoundError as e:
-                print(f"Error: {e}")
+                logging.error(f'IMG file not found,{e}')
         if dump_db==True:
             try:
-                os.remove(f'./db/{gameId}.sqlite')            
+                os.remove(f'./data/{gameId}.sqlite')   
+                logging.info('Clean up of database succesful')         
             except FileNotFoundError as e:
-                print(f"Error: {e}")
+                logging.error(f'database file not found,{e}')
         else:
             pass
 
-    def configure_plot(ax, title:str, extent:list) -> None:
+    def configure_plot(ax,title:str, extent:list) -> None:
         '''
         configure the axis for the kde Plot
         '''
@@ -85,7 +92,8 @@ class do:
         ax.tick_params(axis='both', which='both', length=0, labelsize=0)
         ax.set_xlabel("")
         ax.set_ylabel("")
- 
+        logging.info('Configured plot')
+
     def scheduler() -> List[int]:
         '''
         Get a list of game IDs for the previous day.
@@ -99,8 +107,10 @@ class do:
             for entry in response['gameWeek']:
                 if entry['date'] == str(date.today() - timedelta(days=1)):
                     gameList.extend(game['id'] for game in entry['games'])
+
+            logging.info(f'Got gameIds for yesterday')
         except requests.RequestException as e:
-            print(f"Scheduler Request failed: {e}")
+            logging.error(f'Schedulerer failed, {e}')
         return gameList
    
 

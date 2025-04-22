@@ -3,6 +3,7 @@ import src.Util as Util
 import src.get as Get
 import sqlite3
 from typing import List, Tuple
+import logging
 
 class table:
     '''
@@ -35,6 +36,7 @@ class table:
         for query in tables:
             cursor.execute(query)
         conn.commit()
+        logging.info(f'Created table for {gameId} from database')
         
         
 
@@ -101,6 +103,7 @@ class table:
                 cursor.execute(query_info['query'], query_info['params'](elem))
         conn.commit()
         conn.close()
+        logging.info(f'filled table for {gameId} from database')
 
 class query:
     ''''
@@ -122,6 +125,7 @@ class query:
                     SELECT xPos,yPos FROM goal_table WHERE eventOwnerTeamId=?
                     ;''',(teamId,teamId,teamId,)).fetchall()
         conn.close()
+        logging.info(f'Fetched KDE data for {gameId} for team {teamId} from database')
         return c
     
     def tablePlot(teamId:int,gameId:str) -> List[Tuple[int, str]]:
@@ -140,6 +144,8 @@ class query:
                 UNION ALL SELECT COUNT(*), 'TeamBlock' AS reason FROM block_table WHERE eventOwnerTeamId = ? AND reason!='blocked';
                 ''',(teamId,teamId,teamId,teamId,teamId,teamId,)).fetchall()
         conn.close()
+        logging.info(f'Fetched table data for {gameId} for team {teamId} from database')
+
         return c
     
     def shotTypePlot(teamId:int,gameId:str)-> List[Tuple[str, int]]:
@@ -156,6 +162,8 @@ class query:
                               UNION ALL SELECT shotType FROM goal_table WHERE eventOwnerTeamId=?) 
                               GROUP BY shotType ORDER BY shotType;''',(teamId,teamId,teamId,)).fetchall()
         conn.close()
+        logging.info(f'Fetched shotType data for {gameId} for team {teamId} from database')
+
         return c
     
     def targetByPeriod(teamId:int,gameId:str)-> List[Tuple[int, str, str]]:
@@ -185,6 +193,7 @@ class query:
         SELECT time, 'teammate-blocked' AS reason FROM block_table WHERE eventOwnerTeamId = ? AND reason != 'blocked'
         ) AS data WHERE time > 0 AND time <= 60 GROUP BY time_range, reason;''',
         (teamId,teamId,teamId,teamId,teamId,teamId,)).fetchall()
+        logging.info(f'Fetched shotData by period for {gameId} for team {teamId} from database')
         return c
     
     def targetByShooter(teamId:int,gameId:str)-> List[Tuple[int, str, int]]:
@@ -195,7 +204,6 @@ class query:
         '''
         conn = sqlite3.connect(f'./data/{gameId}.sqlite')
         cursor = conn.cursor()
-        '''getData9'''
         c = cursor.execute('''WITH reason_counts AS (
         SELECT shooterId, reason, COUNT(reason) AS reasonCount
         FROM (
@@ -242,5 +250,6 @@ class query:
         JOIN top_shooters ts ON rs.shooterId = ts.shooterId
         ORDER BY rs.totalReasonCount DESC, rs.shooterId, rs.reasonRank;''',(teamId,teamId,teamId,teamId)).fetchall()
         conn.close()
+        logging.info(f'Fetched target by shooter data for {gameId} for team {teamId} from database')
         return c
   

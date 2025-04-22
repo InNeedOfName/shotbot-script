@@ -2,6 +2,7 @@ from atproto import Client, models,client_utils
 from typing import Dict
 import os
 from dotenv import load_dotenv 
+import logging
 
 
 class Bluesky:
@@ -36,7 +37,8 @@ class Bluesky:
                     image=img_data,
                     image_alt=f"{data['team_name_home']} vs. {data['team_name_away']}",
                     image_aspect_ratio=aspect_ratio)
+                logging.info(f'Posted data for {game_id}')
             except FileNotFoundError as e:
-                print(f"Error: {e}")
+                logging.error(f'Error {e} in BlueSkyBot')
         else:
             pass

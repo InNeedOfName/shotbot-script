@@ -2,13 +2,14 @@ import src.db as db
 import src.get as get
 import pandas as pd
 from collections import defaultdict
+from typing import Dict, List, Tuple, DefaultDict, Any, Union
 
 '''
 These methods prepare the data from the database, to be plotted
 '''
 
 
-def params(gameId):
+def params(gameId: int) -> Dict[str, Union[int, str]]:
     ''''
     Defining the params that will be passed
     args:
@@ -36,15 +37,15 @@ def params(gameId):
             'team_name_home':team_name_home,'team_name_away':team_name_away,
             'date':date,'place':place,'gameId':gameId}
 
-def kde(id_home,id_away,gameId):
+def kde(id_home: int, id_away: int, gameId: int) -> Dict[str, pd.DataFrame]:
     '''
     Kernel Density Estimation of the list of shotpositions for each team
 
   
     args:
-        id_home(int):      team Id of the home Team
-        id_away(int):      team Id of the away Team
-        gameId(int):    the Id of the game
+        id_home(int):       team Id of the home Team
+        id_away(int):       team Id of the away Team
+        gameId(int):        the Id of the game
     returns   
         dict:           the result of the KDE 
     '''
@@ -55,7 +56,7 @@ def kde(id_home,id_away,gameId):
     combined_data = pd.concat([data_home, data_away])
     return {'data_home':data_home,'data_away':data_away,'combined_data':combined_data}
 
-def shooters_by_area(id_home,id_away,gameId):
+def shooters_by_area(id_home: int, id_away: int, gameId: int) -> Dict[str, DefaultDict[str, Dict[str, int]]]:
     '''
     Reordering the list of target counts by players as a dict
 
@@ -78,7 +79,7 @@ def shooters_by_area(id_home,id_away,gameId):
     return {'d_home':d_home,'d_away':d_away}
 
 
-def shot_types(id_home,id_away,gameId):
+def shot_types(id_home: int, id_away: int, gameId: int) -> Dict[str, Union[int, List[Tuple[str, int]]]]:
     '''
     args:
         id_home(int):      team Id of the home Team
@@ -94,7 +95,7 @@ def shot_types(id_home,id_away,gameId):
     return {'shot_sums_home':shot_sums_home,'shot_sums_away':shot_sums_away,
             'shot_types_home':shot_types_home,'shot_types_away':shot_types_away}
 
-def table(id_home,id_away,gameId):
+def table(id_home: int, id_away: int, gameId: int) -> Dict[str, List[List[Union[str, int]]]]:
     '''
     args:
         id_home(int):      team Id of the home Team
@@ -115,7 +116,7 @@ def table(id_home,id_away,gameId):
             [table_home[5][0],'Teammate blocked',table_away[5][0]]]
     return {'table_data':table_data}
 
-def targets_by_period(id_home,id_away,gameId):
+def targets_by_period(id_home: int, id_away: int, gameId: int) -> Dict[str, DefaultDict[str, Dict[str, int]]]:
     '''
     args:
         id_home(int):      team Id of the home Team
@@ -132,7 +133,7 @@ def targets_by_period(id_home,id_away,gameId):
         event_counts_away[elem[1]][elem[2]]=elem[0]
     return {'event_counts_home':event_counts_home,'event_counts_away':event_counts_away}
 
-def prepare(gameId):
+def prepare(gameId: int) -> Dict[str, Any]:
     '''
     peparing the params like id_home,id_away so all the functions are callable
     '''
@@ -140,7 +141,7 @@ def prepare(gameId):
     data.update(params(gameId))
     return data
 
-def all(gameId):
+def all(gameId: int) -> Dict[str, Any]:
     '''
     Taking all the results of the functions above and put them into
     a dict structure to be easily callable

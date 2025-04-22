@@ -1,3 +1,5 @@
+import logging 
+
 NHL_TEAMS = {
         1: 'NJD', 2: 'NYI', 3: 'NYR', 4: 'PHI', 5: 'PIT', 6: 'BOS', 7: 'BUF', 8: 'MTL', 9: 'OTT', 10: 'TOR',
         13: 'FLA', 14: 'TBL', 12: 'CAR', 15: 'WSH', 16: 'CHI', 17: 'DET', 18: 'NSH', 19: 'STL', 20: 'CGY',
@@ -6,3 +8,12 @@ NHL_TEAMS = {
     }
 
 BASE_URL = "https://api-web.nhle.com/v1/"
+
+def configure_logging():
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        filename='log.txt',
+                        filemode='a')  # 'a' stands for append mode
+
+# Call the function to configure logging
+configure_logging()
