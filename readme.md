@@ -14,18 +14,7 @@ This is a small script, that will:
 You can see the result of it at https://bsky.app/profile/shotbot.bsky.social
 ## How do I use it?
 
-In general, use Python3.
-The script is using systemlibraries such as cairo, thus you'd need to
-
-````
-apt update && apt install -y \
-        libcairo2-dev \
-        libjpeg-dev \
-        libgif-dev \
-        && rm -rf /var/lib/apt/lists/*
-````
-
-or use the dockerfile.
+In general, use Python3. I built it to be used on a linux system.
 
 ## Run the main.py
 run
@@ -110,6 +99,6 @@ That's not a question.
 ### What is anyone supposed to do with that kind of analysis?
 
 I just extracted,transformed,loaded and visualised data.
-You can draw the conclusion that you want from it, it's just statistics afterall.
+You can draw the conclusion that you want from it, it's just statistics.
 You could put your own methods into the code.
 If you want a more in depth analysis of the shots, send me a message.

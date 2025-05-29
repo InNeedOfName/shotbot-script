@@ -1,7 +1,3 @@
-bin/*
 *.sqlite
 src/.env
-/src/__pycache__
-*.9
-src/.ipynb_checkpoints/*
 venv/
