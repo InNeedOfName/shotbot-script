@@ -1,3 +1,7 @@
+# Disclaimer
+Please keep in mind, that I am currently refactoring.
+This version will be moved to the legacy branch in the future.
+
 # What is is this?
 
 This is a small script, that will:
